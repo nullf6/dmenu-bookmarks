@@ -6,7 +6,7 @@ file="${HOME}/.snippets"
 if grep -q "^$bookmark$" "$file"; then
 	notify-send "Oops" "Already Bookmarked!"
 else
-	bookmarkEdit=$(:|dmenu -p "Make changes to the bookmark: $bookmark")
+	bookmarkEdit=$(:|dmenu -p "Make changes to the bookmark: $bookmark" & sleep 0.1 && xdotool type $bookmark)
 	if [ -z "$bookmarkEdit" ]
 	then
 		notify-send "Bookmark added!" "$bookmark is now saved to the file"
