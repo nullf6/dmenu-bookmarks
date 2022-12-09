@@ -3,16 +3,22 @@
 bookmark="$(xclip -o)"
 file="${HOME}/.snippets"
 
-if grep -q "^$bookmark$" "$file"; then
-	notify-send "Oops" "Already Bookmarked!"
+if [ -z "$bookmark" ]
+then
+	notify-send "No string highlighted!" "Please select a string to bookmark"
+	exit 1
 else
-	bookmarkEdit=$(:|dmenu -p "Make changes to the bookmark: $bookmark" & sleep 0.1 && xdotool type $bookmark)
-	if [ -z "$bookmarkEdit" ]
-	then
-		notify-send "Bookmark added!" "$bookmark is now saved to the file"
-		echo "$bookmark" >> $file
+	if grep -q "^$bookmark$" "$file"; then
+		notify-send "Oops" "Already Bookmarked!"
 	else
-		notify-send "Bookmark added!" "$bookmarkEdit is now saved to the file"
-		echo "$bookmarkEdit" >> "$file"
+		bookmarkEdit=$(:|dmenu -p "Make changes to the bookmark: $bookmark" & sleep 0.1 && xdotool type $bookmark)
+		if [ -z "$bookmarkEdit" ]
+		then
+			notify-send "Bookmark added!" "$bookmark is now saved to the file"
+			echo "$bookmark" >> $file
+		else
+			notify-send "Bookmark added!" "$bookmarkEdit is now saved to the file"
+			echo "$bookmarkEdit" >> "$file"
+		fi
 	fi
 fi
